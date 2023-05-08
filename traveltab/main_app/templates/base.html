@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Cat Collector</title>
+    <title>TravelTab</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
@@ -16,15 +16,16 @@
         <nav>
             <div class="nav-wrapper">
                 <ul>
-                    <li><a href="{% url 'home' %}" class="left brand-logo">&nbsp;&nbsp;Cat Collector</a></li>
+                    <li><a href="{% url 'home' %}" class="left brand-logo">&nbsp;&nbsp;TravelTab</a></li>
                 </ul>
                 <ul class="right">
+                  <li><a href="{% url 'logout' %}">Log Out</a></li>
                   <li><a href="{% url 'about' %}">About</a></li>
+                  <li><a href="{% url 'signup' %}">Sign Up</a></li>
+                  <li><a href="{% url 'login' %}">Log In</a></li>
+                  <li><a href="{% url 'logout' %}">Log Out</a></li>
                   {% if user.is_authenticated %}
-                    <li><a href="{% url 'logout' %}">Log Out</a></li>
                   {% else %}
-                    <li><a href="{% url 'signup' %}">Sign Up</a></li>
-                    <li><a href="{% url 'login' %}">Log In</a></li>
                   {% endif %}
                 </ul>
             </div>
@@ -35,7 +36,7 @@
         {% endblock %}
     </main>
   	<footer class="page-footer">
-       <div class="right">All Rights Reserved, &copy; 2022 Cat Collector &nbsp;</div>
+       <div class="right">All Rights Reserved, &copy; 2023 TravelTab &nbsp;</div>
     </footer>
 </body>
 </html>
