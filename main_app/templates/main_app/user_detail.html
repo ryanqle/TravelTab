@@ -3,31 +3,26 @@
 
 <h1>{{user.username}} Trips</h1>
 
-<a href="{% url 'trips_create' %}">Add New Trip</a>
+<a href="{% url 'trip_create' %}">Add New Trip</a>
 <div class="row">
     <div class="col s6">
         If current trip has not ended, show current trip details and button to view current trip
     </div>
     <div class="col s6">
-        Show all past trips
-        With Start and End Date
-        Name of trip
-        Amount
-        <table class="striped">
-            <thead>
-              <tr><th>Start Date</th><th>End Date</th><th>Trip Name</th></tr>
-            </thead>
-            <tbody>
-                {% for trip in trips.all %}
-                  <tr>
-                    <td>{{trip.start_date}}</td>
-                    <td>{{trip.end_date}}</td>
-                    <td>{{trip.name}}</td>
-                  </tr>
-                {% endfor %}
-                </tbody>
-          </table>
+        <div class="row">
+            <div class="col s3"><strong>Start Date</strong></div>
+            <div class="col s3"><strong>End Date</strong></div>
+            <div class="col s6"><strong>Trip Name</strong></div>
+        </div>
+        {% for trip in trips.all %}
+        <a href="{% url 'trip_detail' trip.id %}" class="row">
+            <div class="col s3">{{ trip.start_date }}</div>
+            <div class="col s3">{{ trip.end_date }}</div>
+            <div class="col s6">{{ trip.name }}</div>
+        </a>
+        {% endfor %}
     </div>
+    
 </div>
 
 

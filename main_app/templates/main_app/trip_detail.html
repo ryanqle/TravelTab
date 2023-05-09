@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Current Trip</h1>
+<h1>{{trip.name}}</h1>
+<div class="card-action">
+    <a href="{% url 'trip_update' trip.id %}">Edit</a>
+    <a href="{% url 'trip_delete' trip.id %}">Delete</a>
+  </div>
 <h5>Transactions: </h5>
 <h5>Members: </h5>
 
 <div class="row">
     <div class="col s6">
-        Add Transaction Button
+        <a href="{% url 'transaction_create' pk=trip.pk%}">Add Transaction</a>
         List of Transactions
     </div>
     <div class="col s6">

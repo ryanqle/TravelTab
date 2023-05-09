@@ -1,13 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 
+{% if object %}
+<h1>Edit Trip</h1>
+{% else %}
 <h1>New Trip Name</h1>
+{% endif %}
 
 <div>
 <form method="POST" action="">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn">Create Trip</button>
+    <button type="submit" class="btn">Submit</button>
 </form>
 </div>
 

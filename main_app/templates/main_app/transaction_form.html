@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if object %}
+<h1>Edit Transaction</h1>
+{% else %}
+<h1>New Transaction</h1>
+{% endif %}
+
+<div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <label for="{{ form.payer.id_for_label }}">Payer:</label>
+            {{ form.payer }}
+        </div>
+        <button type="submit" class="btn">Submit</button>
+    </form>
+    </div>
+    
+  <script>
+    const startDateEl = document.getElementById('id_date');
+    M.Datepicker.init(startDateEl, {
+      format: 'mmmm d, yyyy',
+      defaultDate: new Date(),
+      setDefaultDate: true,
+      autoClose: true
+    });
+  </script>
+{% endblock %}
