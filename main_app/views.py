@@ -1,11 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect 
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.forms.forms import Form
 from django import forms
+from .forms import TransactionForm
 from .models import User, Trip, Member, Transaction
+from django.urls import reverse_lazy
+
 
 # Create your views here.
 def home(request):
@@ -64,3 +67,15 @@ class TripCreate(CreateView):
         member = Member(trip = self.object, name = self.request.user.first_name)
         member.save()
         return response
+    
+class TripDetail(DetailView):
+   model = Trip
+
+class TripUpdate(UpdateView):
+   model = Trip
+   fields = '__all__'
+
+class TripDelete(DeleteView):
+   model = Trip
+   fields = '__all__'
+   success_url = '/trips'
