@@ -7,16 +7,30 @@
 
 <form method="POST" action="{% url 'signup' %}">
   {% csrf_token %}
-  <label>Username: </label>
   {{ form.username }}
-  <label>Name: </label>
+  <label>Username </label>
+  <br>
+  
   {{ form.first_name }}
-  <label>Email: </label>
+  <label>First Name </label>
+  <br>
+  
+  {{ form.last_name }}
+  <label>Last Name </label>
+  <br>
+  
   {{ form.email }}
-  <label>Password: </label>
+  <label>Email </label>
+  <br>
+  
   {{ form.password1 }}
-  <label>Confirm Password:</label>
+  <label>Password </label>
+  <br>
+  
   {{ form.password2 }}
+  <label>Confirm Password</label>
+  <br>
+  <br>
   <input type="submit" class="btn" value="Sign Up">
 </form>
 
