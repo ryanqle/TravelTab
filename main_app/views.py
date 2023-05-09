@@ -5,9 +5,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from django.forms.forms import Form
 from django import forms
-from .forms import TransactionForm
 from .models import User, Trip, Member, Transaction
-from django.urls import reverse_lazy
+from django.urls import reverse
 
 
 # Create your views here.
@@ -71,6 +70,15 @@ class TripCreate(CreateView):
 class TripDetail(DetailView):
    model = Trip
 
+   def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        trip = self.get_object()
+        transactions = Transaction.objects.filter(trip=trip)
+        members = Member.objects.filter(trip=trip)
+        context['members'] = members
+        context['transactions'] = transactions
+        return context
+
 class TripUpdate(UpdateView):
    model = Trip
    fields = '__all__'
@@ -79,3 +87,19 @@ class TripDelete(DeleteView):
    model = Trip
    fields = '__all__'
    success_url = '/trips'
+
+class TransactionCreate(CreateView):
+    model = Transaction
+    fields = ['name', 'description', 'amount', 'date', 'payer']
+
+class MemberCreate(CreateView):
+   model = Member
+   fields = ['name']
+
+   def form_valid(self, form):
+        trip = Trip.objects.get(id = self.kwargs['pk'])
+        form.instance.trip = trip
+        return super().form_valid(form)
+   
+   def get_success_url(self):
+        return reverse('trip_detail', kwargs={'pk': self.kwargs['pk']})

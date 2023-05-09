@@ -5,21 +5,30 @@
 <div class="card-action">
     <a href="{% url 'trip_update' trip.id %}">Edit</a>
     <a href="{% url 'trip_delete' trip.id %}">Delete</a>
-  </div>
+</div>
 <h5>Transactions: </h5>
 <h5>Members: </h5>
 
 <div class="row">
     <div class="col s6">
         <a href="{% url 'transaction_create' pk=trip.pk%}">Add Transaction</a>
-        List of Transactions
+        <h5>Transactions: </h5>
+        <ul>
+            {% for transaction in transactions %}
+            <li>{{ transaction}}</li>
+            {% endfor %}
+        </ul>
     </div>
     <div class="col s6">
-        Add Members
-        List of Members
+        <a href="{% url 'member_create' pk=trip.pk%}">Add Member</a>
+        <h5>Members: </h5>
+        <ul>
+            {% for member in members %}
+            <li>{{ member.name }}</li>
+            {% endfor %}
+        </ul>
     </div>
 </div>
-
 
 <!-- <div class="row">
     <div class="col s6"></div>
