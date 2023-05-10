@@ -17,6 +17,9 @@ class Member(models.Model):
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
     name = models.CharField()
 
+    def __str__(self):
+        return self.name
+
 class Transaction(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=255)

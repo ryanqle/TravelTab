@@ -15,7 +15,9 @@
         <h5>Transactions: </h5>
         <ul>
             {% for transaction in transactions %}
-            <li>{{ transaction}}</li>
+            <li>{{ transaction.name }}
+                ${{transaction.amount}}
+            </li>
             {% endfor %}
         </ul>
     </div>

@@ -7,21 +7,30 @@
 <h1>New Transaction</h1>
 {% endif %}
 
+
 <div>
     <form method="POST" action="">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn">Submit</button>
     </form>
-    </div>
-    
-  <script>
+</div>
+
+
+
+<script>
     const startDateEl = document.getElementById('id_date');
     M.Datepicker.init(startDateEl, {
-      format: 'mmmm d, yyyy',
-      defaultDate: new Date(),
-      setDefaultDate: true,
-      autoClose: true
+        format: 'mmmm d, yyyy',
+        defaultDate: new Date(),
+        setDefaultDate: true,
+        autoClose: true
     });
-  </script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('select');
+        var instances = M.FormSelect.init(elems);
+    });
+
+</script>
 {% endblock %}

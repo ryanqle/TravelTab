@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.views.generic import ListView, DetailView
-from django.forms.forms import Form
+from django.views.generic import DetailView
+from django.forms import ModelChoiceField
 from django import forms
 from .models import User, Trip, Member, Transaction
 from django.urls import reverse
@@ -81,35 +81,61 @@ class TripDetail(DetailView):
 
 class TripUpdate(UpdateView):
    model = Trip
-   fields = '__all__'
+   fields = ['name', 'start_date', 'end_date']
+   success_url = '/trips'
 
 class TripDelete(DeleteView):
    model = Trip
    fields = '__all__'
    success_url = '/trips'
 
-class TransactionCreate(CreateView):
-    model = Transaction
-    fields = ['name', 'description', 'amount', 'date', 'payer']
-
 class MemberCreate(CreateView):
-   model = Member
-   fields = ['name']
+    model = Member
+    fields = ['name']
 
-   def form_valid(self, form):
+    def form_valid(self, form):
         trip = Trip.objects.get(id = self.kwargs['pk'])
         form.instance.trip = trip
         return super().form_valid(form)
    
-   def get_success_url(self):
+    def get_success_url(self):
         return reverse('trip_detail', kwargs={'pk': self.kwargs['pk']})
 
 
 class MemberUpdate(UpdateView):
-   model = Member
-   fields = '__all__'
+    model = Member
+    fields = '__all__'
+
+    def get_success_url(self):
+        trip_id = self.kwargs['trip_id']
+        return reverse('trip_detail', kwargs={'pk': trip_id})
+
 
 class MemberDelete(DeleteView):
-   model = Member
-   fields = '__all__'
-   success_url = '/trips'
+    model = Member
+    fields = '__all__'
+
+    def get_success_url(self):
+        trip_id = self.kwargs['trip_id']
+        return reverse('trip_detail', kwargs={'pk': trip_id})
+    
+class TransactionCreate(CreateView):
+    model = Transaction
+    fields = ['name', 'description', 'amount', 'date', 'payer']
+
+    def get_form(self, form_class = None):
+        form = super().get_form(form_class)
+        trip = Trip.objects.get(pk=self.kwargs['pk'])
+        members = Member.objects.filter(trip=trip)
+        form.fields['payer'].choices = [(member.pk, member.name) for member in members]
+        print(form.fields['payer'].choices)
+        return form
+
+
+    def form_valid(self, form):
+        form.instance.trip = Trip.objects.get(pk=self.kwargs['pk'])
+        return super().form_valid(form)
+    
+    def get_success_url(self):
+        trip_id = self.kwargs['pk']
+        return reverse('trip_detail', kwargs={'pk': trip_id})
