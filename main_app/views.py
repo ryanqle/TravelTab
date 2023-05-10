@@ -75,8 +75,12 @@ class TripDetail(DetailView):
         trip = self.get_object()
         transactions = Transaction.objects.filter(trip=trip)
         members = Member.objects.filter(trip=trip)
+
+        total_spent = sum(transaction.amount for transaction in transactions)
+
         context['members'] = members
         context['transactions'] = transactions
+        context['total_spent'] = total_spent
         return context
 
 class TripUpdate(UpdateView):
