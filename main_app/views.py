@@ -103,3 +103,13 @@ class MemberCreate(CreateView):
    
    def get_success_url(self):
         return reverse('trip_detail', kwargs={'pk': self.kwargs['pk']})
+
+
+class MemberUpdate(UpdateView):
+   model = Member
+   fields = '__all__'
+
+class MemberDelete(DeleteView):
+   model = Member
+   fields = '__all__'
+   success_url = '/trips'

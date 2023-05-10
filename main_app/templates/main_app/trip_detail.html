@@ -24,7 +24,12 @@
         <h5>Members: </h5>
         <ul>
             {% for member in members %}
-            <li>{{ member.name }}</li>
+            <li>{{ member.name }}
+                <div class="card-action">
+                    <a href="{% url 'member_update' trip_id=trip.pk pk=member.pk %}">Edit</a>
+                    <a href="{% url 'member_delete' trip_id=trip.pk pk=member.pk %}">Delete</a>
+                </div>
+            </li>
             {% endfor %}
         </ul>
     </div>
