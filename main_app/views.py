@@ -128,7 +128,6 @@ class TransactionCreate(CreateView):
         trip = Trip.objects.get(pk=self.kwargs['pk'])
         members = Member.objects.filter(trip=trip)
         form.fields['payer'].choices = [(member.pk, member.name) for member in members]
-        print(form.fields['payer'].choices)
         return form
 
 
@@ -138,4 +137,28 @@ class TransactionCreate(CreateView):
     
     def get_success_url(self):
         trip_id = self.kwargs['pk']
+        return reverse('trip_detail', kwargs={'pk': trip_id})
+
+class TransactionUpdate(UpdateView):
+    model = Transaction
+    fields = ['name', 'description', 'amount', 'date', 'payer']
+
+    def get_form(self, form_class = None):
+        form = super().get_form(form_class)
+        trip = Trip.objects.get(pk=self.kwargs['trip_id'])
+        members = Member.objects.filter(trip=trip)
+        form.fields['payer'].choices = [(member.pk, member.name) for member in members]
+        return form
+    
+    def get_success_url(self):
+        trip_id = self.kwargs['trip_id']
+        return reverse('trip_detail', kwargs={'pk': trip_id})
+
+
+class TransactionDelete(DeleteView):
+    model = Transaction
+    fields = '__all__'
+
+    def get_success_url(self):
+        trip_id = self.kwargs['trip_id']
         return reverse('trip_detail', kwargs={'pk': trip_id})

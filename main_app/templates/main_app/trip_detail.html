@@ -17,6 +17,10 @@
             {% for transaction in transactions %}
             <li>{{ transaction.name }}
                 ${{transaction.amount}}
+                <div class="card-action">
+                    <a href="{% url 'transaction_update' trip_id=trip.pk pk=transaction.pk %}">Edit</a>
+                    <a href="{% url 'transaction_delete' trip_id=trip.pk pk=transaction.pk %}">Delete</a>
+                </div>
             </li>
             {% endfor %}
         </ul>
