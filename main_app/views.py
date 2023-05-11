@@ -13,7 +13,6 @@ from django.urls import reverse
 def home(request):
     return render(request, 'home.html')
 
-
 def about(request):
     return render(request, 'about.html')
 
@@ -34,26 +33,23 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
        
-
 def signup(request):
-  error_message = ''
-  if request.method == 'POST':
-    form = CustomUserCreationForm(request.POST)
-    if form.is_valid():
-      user = form.save()
-      login(request, user)
-      return redirect('home')
-    else:
-      error_message = 'Invalid sign up - try again'
-  form = CustomUserCreationForm()
-  context = {'form': form, 'error_message': error_message}
-  return render(request, 'registration/signup.html', context)
+    error_message = ''
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+        else:
+            error_message = 'Invalid sign up - try again'
+    form = CustomUserCreationForm()
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'registration/signup.html', context)
 
 def user_trips(request):
-   trips = Trip.objects.filter(user=request.user)
-   return render(request, 'main_app/user_detail.html', {
-      'trips' : trips
-   })
+    trips = Trip.objects.filter(user=request.user)
+    return render(request, 'main_app/user_detail.html', {'trips' : trips})
 
 class TripCreate(CreateView):
     model = Trip
@@ -68,9 +64,9 @@ class TripCreate(CreateView):
         return response
     
 class TripDetail(DetailView):
-   model = Trip
+    model = Trip
 
-   def get_context_data(self, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         trip = self.get_object()
         transactions = Transaction.objects.filter(trip=trip)
@@ -84,14 +80,14 @@ class TripDetail(DetailView):
         return context
 
 class TripUpdate(UpdateView):
-   model = Trip
-   fields = ['name', 'start_date', 'end_date']
-   success_url = '/trips'
+    model = Trip
+    fields = ['name', 'start_date', 'end_date']
+    success_url = '/trips'
 
 class TripDelete(DeleteView):
-   model = Trip
-   fields = '__all__'
-   success_url = '/trips'
+    model = Trip
+    fields = '__all__'
+    success_url = '/trips'
 
 class MemberCreate(CreateView):
     model = Member
@@ -125,13 +121,15 @@ class MemberDelete(DeleteView):
     
 class TransactionCreate(CreateView):
     model = Transaction
-    fields = ['name', 'description', 'amount', 'date', 'payer']
+    fields = ['name', 'description', 'amount', 'date', 'paid_by', 'paid_for']
 
     def get_form(self, form_class = None):
         form = super().get_form(form_class)
         trip = Trip.objects.get(pk=self.kwargs['pk'])
         members = Member.objects.filter(trip=trip)
-        form.fields['payer'].choices = [(member.pk, member.name) for member in members]
+        member_choices = [(member.pk, member.name) for member in members]
+        form.fields['paid_by'].choices = member_choices
+        form.fields['paid_for'].choices = member_choices
         return form
 
 
@@ -157,7 +155,6 @@ class TransactionUpdate(UpdateView):
     def get_success_url(self):
         trip_id = self.kwargs['trip_id']
         return reverse('trip_detail', kwargs={'pk': trip_id})
-
 
 class TransactionDelete(DeleteView):
     model = Transaction
