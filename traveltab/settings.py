@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
+environ.Env()
+environ.Env.read_env()
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%ihgw!*=*n)o8h157!z%*1xtf4q4f_-h($!kip&dy-#+o4*gfo'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True if os.environ['MODE'] == 'dev' else False
 
 ALLOWED_HOSTS = []
 
@@ -77,7 +81,11 @@ WSGI_APPLICATION = 'traveltab.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'traveltab',
+        'NAME': 'ryanqle/bty-traveltab',
+        'USER': 'ryanqle',
+        'PASSWORD': os.environ['DB_PASSWORD'],
+        'HOST': 'db.bit.io',
+        'PORT': '5432',
     }
 }
 
@@ -125,3 +133,6 @@ LOGOUT_REDIRECT_URL = '/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import django_on_heroku
+django_on_heroku.settings(locals())
