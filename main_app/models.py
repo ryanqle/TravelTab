@@ -25,6 +25,7 @@ class Transaction(models.Model):
     description = models.CharField(max_length=255)
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     date = models.DateField()
-    payer = models.ForeignKey(Member, on_delete=models.CASCADE)
+    paid_by = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='transaction_paid_by')
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
+    paid_for = models.ManyToManyField(Member)
 
