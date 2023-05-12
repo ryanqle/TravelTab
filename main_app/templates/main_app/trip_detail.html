@@ -41,9 +41,17 @@
                     </div>
                     <div class="col s6 right-align"> Paid for:
                         {% for member in transaction.paid_for.all %}
-                        <span class="chip">{{ member.name }}</span>
-                        {% endfor %}
+                            <span class="chip">{{ member.name }}
+                        
+                        {% if transaction.paid_for.all|length > 1 %}
+                        {{ transaction.formatted_individual_amt }}
+                    {% endif %}
+                </span>
+                {% endfor %}
                     </div>
+                    
+                    
+                    
                     <div class="edit-delete-card center-align">
                         <a href="{% url 'transaction_update' trip_id=trip.pk pk=transaction.pk %}"
                             class="waves-effect waves-light btn-small"><i class="material-icons left">edit</i>Edit</a>
