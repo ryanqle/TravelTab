@@ -1,40 +1,82 @@
 {% extends 'base.html' %}
+
 {% block content %}
 
-<h1>{{trip.name}}</h1>
-<div class="card-action">
-    <a href="{% url 'trip_update' trip.id %}">Edit</a>
-    <a href="{% url 'trip_delete' trip.id %}">Delete</a>
+<div class="row valign-wrapper">
+    <div class="col s6">
+        <a href="{% url 'trip_update' pk=trip.id %}">
+            <h1>{{trip.name}}</h1>
+        </a>
+    </div>
+    <div class="col s6">
+        <h5>Transactions: {{transactions.count}}</h5>
+        <h5>Members: {{members.count}}</h5>
+    </div>
 </div>
-<h5>Transactions: {{transactions.count}}</h5>
-<h5>Members: {{members.count}}</h5>
 
 <div class="row">
-    <div class="col s6">
-        <a href="{% url 'transaction_create' pk=trip.pk%}">Add Transaction</a>
-        <h5>Transactions: </h5>
-        <h6>Total Spent: {{total_spent}}</h6>
-        <ul>
+    <div class="col s12">
+        <ul class="tabs">
+            <li class="tab col s6"><a href="#transactions">Transactions</a></li>
+            <li class="tab col s6" id="member-tab"><a href="#members">Members</a></li>
+        </ul>
+    </div>
+</div>
+
+<div id="transactions" class="row">
+    <div class="col s12">
+        <div class="center-align"><a href="{% url 'transaction_create' pk=trip.pk%}"
+                class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add Transaction</a></div>
+        {% if transactions %}
+        <ul class="collapsible">
             {% for transaction in transactions %}
-            <li>{{ transaction.name }}
-                ${{transaction.amount}}
-                <div class="card-action">
-                    <a href="{% url 'transaction_update' trip_id=trip.pk pk=transaction.pk %}">Edit</a>
-                    <a href="{% url 'transaction_delete' trip_id=trip.pk pk=transaction.pk %}">Delete</a>
+            <li>
+                <div class="collapsible-header valign-wrapper">
+                    <div class="col s6"><i class="material-icons left">expand_more</i>{{ transaction.name }}</div>
+                    <div class="col s6 right-align">${{ transaction.amount }}</div>
+                </div>
+                <div class="collapsible-body">
+                    <div class="col s12">Memo: {{transaction.description}} </div>
+                    <div class="col s6">Paid By: <span class="chip">{{transaction.paid_by}}</span>
+                    </div>
+                    <div class="col s6 right-align"> Paid for:
+                        {% for member in transaction.paid_for.all %}
+                        <span class="chip">{{ member.name }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="edit-delete-card center-align">
+                        <a href="{% url 'transaction_update' trip_id=trip.pk pk=transaction.pk %}"
+                            class="waves-effect waves-light btn-small"><i class="material-icons left">edit</i>Edit</a>
+                        <a href="{% url 'transaction_delete' trip_id=trip.pk pk=transaction.pk %}"
+                            class="waves-effect waves-light btn-small red accent-4"><i
+                                class="material-icons left">highlight_off</i>Delete</a>
+                    </div>
                 </div>
             </li>
             {% endfor %}
         </ul>
+        <h6 class="right-align">Total Spent: {{total_spent}}</h6>
+        {% endif %}
     </div>
-    <div class="col s6">
-        <a href="{% url 'member_create' pk=trip.pk%}">Add Member</a>
-        <h5>Members: </h5>
-        <ul>
+</div>
+
+<div id="members" class="row">
+    <div class="col s12">
+        <div class="center-align"><a href="{% url 'member_create' pk=trip.pk%}" class="waves-effect waves-light btn"><i
+                    class="material-icons left">add</i>Add Member</a></div>
+        <ul class="collapsible">
             {% for member in members %}
-            <li>{{ member.name }}
-                <div class="card-action">
-                    <a href="{% url 'member_update' trip_id=trip.pk pk=member.pk %}">Edit</a>
-                    <a href="{% url 'member_delete' trip_id=trip.pk pk=member.pk %}">Delete</a>
+            <li>
+                <div class="collapsible-header"><i class="material-icons left">expand_more</i>{{ member.name }}</div>
+                <div class="collapsible-body">
+                    <div>Total Spent: ${{ member.total }}</div>
+                    <div class="edit-delete-card center-align">
+                        <a href="{% url 'member_update' trip_id=trip.pk pk=member.pk %}"
+                            class="waves-effect waves-light btn-small"><i class="material-icons left">edit</i>Edit</a>
+                        <a href="{% url 'member_delete' trip_id=trip.pk pk=member.pk %}"
+                            class="waves-effect waves-light btn-small red accent-4"><i
+                                class="material-icons left">highlight_off</i>Delete</a>
+                    </div>
                 </div>
             </li>
             {% endfor %}
@@ -42,8 +84,30 @@
     </div>
 </div>
 
-<!-- <div class="row">
-    <div class="col s6"></div>
-</div> -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var tabs = document.querySelectorAll('.tabs');
+        M.Tabs.init(tabs, {});
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('.collapsible');
+        var instances = M.Collapsible.init(elems, {});
+    });
+    const collapsibles = document.querySelectorAll('.collapsible');
 
+    collapsibles.forEach(collapsible => {
+        const expandIcon = collapsible.querySelector('.material-icons');
+
+        collapsible.addEventListener('click', () => {
+            collapsible.classList.toggle('active');
+
+            if (collapsible.classList.contains('active')) {
+                expandIcon.textContent = 'expand_less';
+            } else {
+                expandIcon.textContent = 'expand_more';
+            }
+        });
+    });
+
+</script>
 {% endblock %}
