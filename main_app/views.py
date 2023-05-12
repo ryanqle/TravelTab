@@ -54,14 +54,17 @@ def user_trips(request):
 class TripCreate(CreateView):
     model = Trip
     fields = ['name', 'start_date', 'end_date']
-    success_url = '/trips'
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         response = super().form_valid(form)
         member = Member(trip = self.object, name = self.request.user.first_name)
+        member.total = 0
         member.save()
         return response
+    
+    def get_success_url(self):
+        return reverse('trip_detail', kwargs={'pk': self.object.pk})
     
 class TripDetail(DetailView):
     model = Trip
@@ -96,6 +99,7 @@ class MemberCreate(CreateView):
     def form_valid(self, form):
         trip = Trip.objects.get(id = self.kwargs['pk'])
         form.instance.trip = trip
+        form.instance.total = 0
         return super().form_valid(form)
    
     def get_success_url(self):
@@ -135,6 +139,10 @@ class TransactionCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.trip = Trip.objects.get(pk=self.kwargs['pk'])
+        paid_by = form.cleaned_data['paid_by']
+        paid_by.total += form.cleaned_data['amount']
+        paid_by.save()
+
         return super().form_valid(form)
     
     def get_success_url(self):
@@ -143,13 +151,15 @@ class TransactionCreate(CreateView):
 
 class TransactionUpdate(UpdateView):
     model = Transaction
-    fields = ['name', 'description', 'amount', 'date', 'payer']
+    fields = ['name', 'description', 'amount', 'date', 'paid_by', 'paid_for']
 
     def get_form(self, form_class = None):
         form = super().get_form(form_class)
         trip = Trip.objects.get(pk=self.kwargs['trip_id'])
         members = Member.objects.filter(trip=trip)
-        form.fields['payer'].choices = [(member.pk, member.name) for member in members]
+        member_choices = [(member.pk, member.name) for member in members]
+        form.fields['paid_by'].choices = member_choices
+        form.fields['paid_for'].choices = member_choices
         return form
     
     def get_success_url(self):

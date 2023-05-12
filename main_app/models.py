@@ -16,6 +16,7 @@ class Trip(models.Model):
 class Member(models.Model):
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
     name = models.CharField()
+    total = models.DecimalField(max_digits=8, decimal_places=2)
 
     def __str__(self):
         return self.name
