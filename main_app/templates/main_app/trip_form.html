@@ -7,29 +7,47 @@
 <h1>New Trip Name</h1>
 {% endif %}
 
-<div>
-<form method="POST" action="">
+<div class="row">
+  <form method="POST" action="" class="col s12">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn">Submit</button>
-    <a href="{% url 'index' %}">Cancel</a>
-</form>
+    <div class="row">
+      <div class="col s6">
+        <button type="submit" class="btn"><i class="material-icons right">send</i>Submit</button>
+        {% if object %}
+        <a href="{{ view.get_success_url }}" class="btn grey lighten-1"><i
+            class="material-icons right">cancel</i>Cancel</a>
+        {% else %}
+        <a href="{% url 'index' %}" class="btn grey lighten-1"><i class="material-icons right">cancel</i>Cancel</a>
+        {% endif %}
+      </div>
+      <div class="col s6 right-align">
+        {% if object %}
+        <a href="{% url 'trip_delete' pk=trip.id %}" class="btn red accent-4"><i
+            class="material-icons right">delete</i>Delete</a>
+        {% endif %}
+      </div>
+    </div>
+  </form>
 </div>
 
-  <script>
-    const startDateEl = document.getElementById('id_start_date');
-    M.Datepicker.init(startDateEl, {
-      format: 'mmmm d, yyyy',
-      defaultDate: new Date(),
-      setDefaultDate: true,
-      autoClose: true
-    });
-    const endDateEl = document.getElementById('id_end_date');
-    M.Datepicker.init(endDateEl, {
-      format: 'mmmm d, yyyy',
-      defaultDate: new Date(),
-      setDefaultDate: true,
-      autoClose: true
-    });
-  </script>
+
+
+
+<script>
+  const startDateEl = document.getElementById('id_start_date');
+  M.Datepicker.init(startDateEl, {
+    format: 'mmmm d, yyyy',
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true
+  });
+  const endDateEl = document.getElementById('id_end_date');
+  M.Datepicker.init(endDateEl, {
+    format: 'mmmm d, yyyy',
+    defaultDate: new Date(),
+    setDefaultDate: true,
+    autoClose: true
+  });
+</script>
 {% endblock %}
