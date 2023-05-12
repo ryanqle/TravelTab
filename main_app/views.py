@@ -7,6 +7,7 @@ from django.forms import ModelChoiceField
 from django import forms
 from .models import User, Trip, Member, Transaction
 from django.urls import reverse
+import locale
 
 
 # Create your views here.
@@ -75,17 +76,21 @@ class TripDetail(DetailView):
         transactions = Transaction.objects.filter(trip=trip)
         members = Member.objects.filter(trip=trip)
 
+        locale.setlocale(locale.LC_ALL, '')
         total_spent = sum(transaction.amount for transaction in transactions)
+        formatted_total_spent = locale.currency(total_spent, grouping=True)
 
         context['members'] = members
         context['transactions'] = transactions
-        context['total_spent'] = total_spent
+        context['total_spent'] = formatted_total_spent
         return context
 
 class TripUpdate(UpdateView):
     model = Trip
     fields = ['name', 'start_date', 'end_date']
-    success_url = '/trips'
+
+    def get_success_url(self):
+        return reverse('trip_detail', kwargs={'pk': self.kwargs['pk']})
 
 class TripDelete(DeleteView):
     model = Trip
