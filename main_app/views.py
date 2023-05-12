@@ -80,6 +80,11 @@ class TripDetail(DetailView):
         total_spent = sum(transaction.amount for transaction in transactions)
         formatted_total_spent = locale.currency(total_spent, grouping=True)
 
+        for transaction in transactions:
+            individual_amt = transaction.individual_amt
+            formatted_individual_amt = locale.currency(individual_amt, grouping=True)
+            transaction.formatted_individual_amt = formatted_individual_amt
+
         context['members'] = members
         context['transactions'] = transactions
         context['total_spent'] = formatted_total_spent
@@ -147,6 +152,16 @@ class TransactionCreate(CreateView):
         paid_by = form.cleaned_data['paid_by']
         paid_by.total += form.cleaned_data['amount']
         paid_by.save()
+
+        amount = form.cleaned_data['amount']
+        members = form.cleaned_data['paid_for']
+        num_members = len(members)
+        individual_amt = amount / num_members
+
+        transaction = form.save(commit=False)
+        transaction.individual_amt = individual_amt
+        transaction.save()
+        transaction.paid_for.set(members)
 
         return super().form_valid(form)
     

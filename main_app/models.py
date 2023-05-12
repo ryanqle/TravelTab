@@ -29,4 +29,5 @@ class Transaction(models.Model):
     paid_by = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='transaction_paid_by')
     trip = models.ForeignKey(Trip, on_delete=models.CASCADE)
     paid_for = models.ManyToManyField(Member)
+    individual_amt = models.DecimalField(max_digits=8, decimal_places=2)
 
