@@ -12,7 +12,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn">Submit</button>
-        <a href="{% url 'trip_detail' pk=object.trip.id %}">Cancel</a>
+        <a href="{{ view.get_success_url }}">Cancel</a>
     </form>
 </div>
     
