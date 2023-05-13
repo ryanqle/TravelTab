@@ -1,6 +1,68 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>About</h1>
+<div class="section center" id="about">
+  <h2>Welcome to <span class="teal-text text-accent-4">TravelTab</span></h2>
+  <p>TravelTab is a web application designed to help people keep track of their expenses and split costs while traveling in a group. With TravelTab, users can easily input their expenses and assign them to specific group members, keeping tabs on who paid for what and how much they owe or are owed by others. The app provides a simple and efficient way to manage shared expenses, helping to avoid misunderstandings or disagreements over money. Whether traveling with friends, family, or colleagues, TravelTab makes it easy to keep track of expenses, stay on budget, and ensure everyone pays their fair share.</p>
+</div>
+<div class="section" id="features">
+  <h2 class="teal-text text-accent-4">Features</h2>
+  <div class="row">
+    <div class="col s12">
+      <div class="card col s12">
+        <div class="card-content">
+          <span class="card-title teal-text text-darken-1">EXPENSE TRACKER</span>
+          <p>A travel expense tracker tool designed to help you keep track of your expenses while traveling. It allows
+            you to record of your group's expenses related to your trip, such as accommodation, transportation, food,
+            and activities. Additionally, a travel expense tracker can also include a feature that allows you to keep
+            track of who paid for what. This feature is particularly useful when traveling with friends, family, or
+            colleagues, where expenses are shared.</p>
+          <br>
+          <p>With the "who paid for what" feature, you can easily input each expense and assign it to the person who
+            paid for it. The tracker will then calculate each person's total expenses and show how much each person owes
+            or is owed by others. This feature can help ensure that everyone pays their fair share and can help avoid
+            confusion or disagreements over expenses.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="section" id="updates">
+  <h2 class="teal-text text-accent-4">Future Updates</h2>
+  <div class="row">
+    <div class="col s12">
+      <div class="card col s12">
+        <div class="card-content">
+          <span class="card-title teal-text text-darken-1">SPLIT BY SHARES</span>
+          <p>A split share feature that allows you to split expenses evenly or unequally among a group of people. With
+            this feature, you can easily divide expenses.</p>
+            <br>
+          <p>The split share feature works by allowing you to input the total cost of an expense and then divide it
+            among the selected individuals. You can choose to split the expense evenly, such as splitting a bill among
+            three people, or you can assign specific amounts to each person, such as if one person paid more for a
+            shared item.</p>
+          <br>
+          <p>With the "who paid for what" feature, you can easily input each expense and assign it to the person who
+            paid for it. The tracker will then calculate each person's total expenses and show how much each person owes
+            or is owed by others. This feature can help ensure that everyone pays their fair share and can help avoid
+            confusion or disagreements over expenses.</p>
+        </div>
+      </div>
+      <div class="card col s12">
+        <div class="card-content">
+          <span class="card-title teal-text text-darken-1">INVITE TO GROUP</span>
+          <p>The invite to group feature  that allows users to invite others to join their expense tracker group. With this feature, users can share the expense tracker and collaborate with others to manage expenses and track spending.</p>
+          <br>
+          <p>Multiple users will be allowed to add expenses and split cost in real time. By enabling real-time collaboration, multiple users can add, edit and track expenses from anywhere and at any time. This helps save time and increases transparency, making it easier to keep track of expenses and share costs among different users.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelectorAll('.pushpin');
+    var instances = M.Pushpin.init(elems, options);
+  });
+</script>
 {% endblock %}
-  
