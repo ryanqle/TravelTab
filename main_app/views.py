@@ -182,6 +182,23 @@ class TransactionUpdate(UpdateView):
         form.fields['paid_for'].choices = member_choices
         return form
     
+    def form_valid(self, form):
+        paid_by = form.cleaned_data['paid_by']
+        paid_by.total += form.cleaned_data['amount']
+        paid_by.save()
+
+        amount = form.cleaned_data['amount']
+        members = form.cleaned_data['paid_for']
+        num_members = len(members)
+        individual_amt = amount / num_members
+
+        transaction = form.save(commit=False)
+        transaction.individual_amt = individual_amt
+        transaction.save()
+        transaction.paid_for.set(members)
+
+        return super().form_valid(form)
+    
     def get_success_url(self):
         trip_id = self.kwargs['trip_id']
         return reverse('trip_detail', kwargs={'pk': trip_id})
