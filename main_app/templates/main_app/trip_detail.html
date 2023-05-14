@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
-
 {% block content %}
 
 <div class="row valign-wrapper">
     <div class="col s6">
-        <a href="{% url 'trip_update' pk=trip.id %}">
+        <a href="#trip-edit-modal" class="modal-trigger">
             <h1>{{trip.name}}</h1>
         </a>
     </div>
@@ -25,8 +24,9 @@
 
 <div id="transactions" class="row">
     <div class="col s12">
-        <div class="center-align"><a href="{% url 'transaction_create' pk=trip.pk%}"
-                class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add Transaction</a></div>
+        <div class="center-align">
+            <a href="#transaction-modal" class="waves-effect waves-light btn modal-trigger"><i class="material-icons left">add</i>Add Transaction</a>
+        </div>
         {% if transactions %}
         <ul class="collapsible">
             {% for transaction in transactions %}
@@ -41,23 +41,22 @@
                     </div>
                     <div class="col s6 right-align"> Paid for:
                         {% for member in transaction.paid_for.all %}
-                            <span class="chip">{{ member.name }}
-                        
-                        {% if transaction.paid_for.all|length > 1 %}
-                        {{ transaction.formatted_individual_amt }}
-                    {% endif %}
-                </span>
-                {% endfor %}
+                        <span class="chip">{{ member.name }}
+                            {% if transaction.paid_for.all|length > 1 %}
+                            {{ transaction.formatted_individual_amt }}
+                            {% endif %}
+                        </span>
+                        {% endfor %}
                     </div>
-                    
-                    
-                    
+
                     <div class="edit-delete-card center-align">
-                        <a href="{% url 'transaction_update' trip_id=trip.pk pk=transaction.pk %}"
-                            class="waves-effect waves-light btn-small"><i class="material-icons left">edit</i>Edit</a>
-                        <a href="{% url 'transaction_delete' trip_id=trip.pk pk=transaction.pk %}"
-                            class="waves-effect waves-light btn-small red accent-4"><i
-                                class="material-icons left">highlight_off</i>Delete</a>
+                        <a href="#transaction-edit-modal-{{ transaction.id }}" class="waves-effect waves-light btn-small modal-trigger"><i class="material-icons left">edit</i>Edit</a>
+                        <a href="{% url 'transaction_delete' trip_id=trip.pk pk=transaction.pk %}" class="waves-effect waves-light btn-small red accent-4"><i class="material-icons left">highlight_off</i>Delete</a>
+                        <div id="transaction-edit-modal-{{ transaction.id }}" class="modal" style="max-height: 100%;" data-url="{% url 'transaction_update' trip_id=trip.pk pk=transaction.pk %}">
+                            <div class="modal-content">
+                                {% include 'main_app/transaction_edit_form.html'%}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </li>
@@ -70,8 +69,9 @@
 
 <div id="members" class="row">
     <div class="col s12">
-        <div class="center-align"><a href="{% url 'member_create' pk=trip.pk%}" class="waves-effect waves-light btn"><i
-                    class="material-icons left">add</i>Add Member</a></div>
+        <div class="center-align">
+            <a href="#member-modal" class="waves-effect waves-light btn modal-trigger"><i class="material-icons left">add</i>Add Member</a>
+        </div>
         <ul class="collapsible">
             {% for member in members %}
             <li>
@@ -79,16 +79,33 @@
                 <div class="collapsible-body">
                     <div>Total Spent: ${{ member.total }}</div>
                     <div class="edit-delete-card center-align">
-                        <a href="{% url 'member_update' trip_id=trip.pk pk=member.pk %}"
-                            class="waves-effect waves-light btn-small"><i class="material-icons left">edit</i>Edit</a>
-                        <a href="{% url 'member_delete' trip_id=trip.pk pk=member.pk %}"
-                            class="waves-effect waves-light btn-small red accent-4"><i
-                                class="material-icons left">highlight_off</i>Delete</a>
+                        <a href="#member-edit-modal-{{ member.id }}" class="waves-effect waves-light btn-small modal-trigger"><i class="material-icons left">edit</i>Edit</a>
+                        <a href="{% url 'member_delete' trip_id=trip.pk pk=member.pk %}" class="waves-effect waves-light btn-small red accent-4"><i class="material-icons left">highlight_off</i>Delete</a>
+                        <div id="member-edit-modal-{{ member.id }}" class="modal" style="max-height: 100%;" data-url="{% url 'member_update' trip_id=trip.pk pk=member.pk %}">
+                            <div class="modal-content">
+                                {% include 'main_app/member_edit_form.html'%}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </li>
             {% endfor %}
         </ul>
+    </div>
+</div>
+<div id="trip-edit-modal" class="modal" style="max-height: 100%;">
+    <div class="modal-content">
+        {% include 'main_app/trip_edit_form.html' %}
+    </div>
+</div>
+<div id="transaction-modal" class="modal" style="max-height: 100%;" data-url="{% url 'transaction_create' pk=trip.id %}">
+    <div class="modal-content">
+        {% include 'main_app/transaction_form.html'%}
+    </div>
+</div>
+<div id="member-modal" class="modal" style="max-height: 100%;" data-url="{% url 'member_create' pk=trip.id%}">
+    <div class="modal-content">
+        {% include 'main_app/member_form.html'%}
     </div>
 </div>
 
@@ -100,22 +117,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         var elems = document.querySelectorAll('.collapsible');
         var instances = M.Collapsible.init(elems, {});
+
     });
-    const collapsibles = document.querySelectorAll('.collapsible');
-
-    collapsibles.forEach(collapsible => {
-        const expandIcon = collapsible.querySelector('.material-icons');
-
-        collapsible.addEventListener('click', () => {
-            collapsible.classList.toggle('active');
-
-            if (collapsible.classList.contains('active')) {
-                expandIcon.textContent = 'expand_less';
-            } else {
-                expandIcon.textContent = 'expand_more';
-            }
-        });
-    });
-
 </script>
 {% endblock %}
