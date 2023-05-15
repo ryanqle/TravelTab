@@ -1,7 +1,32 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
 
-<h1>Home</h1>
+<div class="center-align">
+    <br>
+    <br>
+    <div class="row">
+        <div class="col s12">
+          <div class="center">
+                <img src="{% static 'images/traveltab.png' %}" alt="Logo">
+          </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <h3>Get Lost In New Places</h3>
+            <h3> Not On Your Receipts</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+          <div>
+            Say goodbye to confusion and disputes about who paid for what - TravelTab makes it easy to record and split expenses among your travel group. With TravelTab, you can create a trip, add your travel companions, and start adding expenses. The app automatically calculates the total cost and who owes what, making it simple to settle expenses at the end of your trip. Whether you're backpacking through Europe or planning a weekend getaway with friends, TravelTab is the perfect app to help you keep track of your expenses and stay organized on your travels.
+          </div>
+        </div>
+    </div>
+</div>
 
 
 {% endblock %}
