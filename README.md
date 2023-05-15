@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="https://imgur.com/a/PZDT3cv">
+<img src="https://i.imgur.com/P9efNpD.png">
 
-# TravelTab
+#
 
 ### Built by: **[Ryan Q Le](https://www.linkedin.com/in/ryanqle/)**
 
@@ -35,13 +35,15 @@ Say goodbye to confusion and disputes about who paid for what - **TravelTab** ma
 
 ## Getting Started
 
-<img src="https://imgur.com/GXWeMu5">
+<div align="center">
+
+<img src="https://i.imgur.com/GXWeMu5.png">
 
 Once a user signs up and log in. They can view their trips in the **My Trips** tab. **My Trips** will display all of their trip logs. Inside the trip view, users will be able to **Add Members** and **Add Transactions** to the tracker.
 
 **Add Transaction** will display a form for the Name of the transaction, an optional description memo field, amount, date of transaction, paid by and paid for selection of members on the trip.
 
-<div align="center">
+
 
 ![Gif](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGUxOTlkNTRhYjE4YjRiNmI4ZjE5YmY4ZDM2NjY3MzczMmQzOTY5ZCZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/4f4t2yd4zX7yJZnweP/giphy.gif)
 </div>
