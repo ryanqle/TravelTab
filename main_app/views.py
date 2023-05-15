@@ -3,9 +3,8 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import DetailView
-from django.forms import ModelChoiceField
 from django import forms
-from .models import User, Trip, Member, Transaction
+from .models import Trip, Member, Transaction
 from django.urls import reverse
 import locale
 
@@ -85,6 +84,7 @@ class TripDetail(DetailView):
             formatted_individual_amt = locale.currency(individual_amt, grouping=True)
             transaction.formatted_individual_amt = formatted_individual_amt
 
+        context['trip'] = self.object
         context['members'] = members
         context['transactions'] = transactions
         context['total_spent'] = formatted_total_spent
@@ -93,6 +93,7 @@ class TripDetail(DetailView):
 class TripUpdate(UpdateView):
     model = Trip
     fields = ['name', 'start_date', 'end_date']
+    template_name = 'main_app/trip_edit_form.html'
 
     def get_success_url(self):
         return reverse('trip_detail', kwargs={'pk': self.kwargs['pk']})
@@ -105,6 +106,7 @@ class TripDelete(DeleteView):
 class MemberCreate(CreateView):
     model = Member
     fields = ['name']
+    template_name = 'main_app/member_form.html'
 
     def form_valid(self, form):
         trip = Trip.objects.get(id = self.kwargs['pk'])
@@ -118,7 +120,8 @@ class MemberCreate(CreateView):
 
 class MemberUpdate(UpdateView):
     model = Member
-    fields = '__all__'
+    fields = ['name']
+    template_name = 'main_app/member_edit_form.html'
 
     def get_success_url(self):
         trip_id = self.kwargs['trip_id']
@@ -136,6 +139,8 @@ class MemberDelete(DeleteView):
 class TransactionCreate(CreateView):
     model = Transaction
     fields = ['name', 'description', 'amount', 'date', 'paid_by', 'paid_for']
+    template_name = 'main_app/transaction_form.html'
+
 
     def get_form(self, form_class = None):
         form = super().get_form(form_class)
@@ -172,6 +177,7 @@ class TransactionCreate(CreateView):
 class TransactionUpdate(UpdateView):
     model = Transaction
     fields = ['name', 'description', 'amount', 'date', 'paid_by', 'paid_for']
+    template_name = 'main_app/transaction_edit_form.html'
 
     def get_form(self, form_class = None):
         form = super().get_form(form_class)
