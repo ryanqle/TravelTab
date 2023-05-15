@@ -35,6 +35,8 @@ Say goodbye to confusion and disputes about who paid for what - **TravelTab** ma
 
 ## Getting Started
 
+<img src="https://imgur.com/GXWeMu5">
+
 Once a user signs up and log in. They can view their trips in the **My Trips** tab. **My Trips** will display all of their trip logs. Inside the trip view, users will be able to **Add Members** and **Add Transactions** to the tracker.
 
 **Add Transaction** will display a form for the Name of the transaction, an optional description memo field, amount, date of transaction, paid by and paid for selection of members on the trip.
