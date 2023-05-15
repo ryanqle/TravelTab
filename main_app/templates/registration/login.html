@@ -1,8 +1,4 @@
-{% extends 'base.html' %}
-{% block content %}
-
 <h1>Log In</h1>
-
 
 <form method="POST" action="{% url 'login' %}">
     {% csrf_token %}
@@ -10,5 +6,22 @@
     <input type="hidden" name="next" value="{{ next }}">
     <button type="submit" class="btn">Log In</button>
   </form>
-  
-{% endblock %}
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelectorAll('#login-modal');
+    var options = {
+      onOpenEnd: function (modal) {
+        var modalContent = modal.querySelector('.modal-content');
+        modalContent.innerHTML = '';
+        fetch("{% url 'login' %}")
+          .then(response => response.text())
+          .then(data => {
+            modalContent.innerHTML = data;
+          })
+          .catch(error => console.error(error));
+      }
+    };
+    var instances = M.Modal.init(elems, options);
+  });
+</script>
