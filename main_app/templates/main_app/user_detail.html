@@ -3,27 +3,31 @@
 
 <h1 class="center-align">{{user.username}} Trips</h1>
 
-<div class="center-align"><a href="{% url 'trip_create' %}"
-    class="waves-effect waves-light btn"><i class="material-icons left">add</i>Add New Trip</a>
+<div class="center-align"><a href="#trip-modal"
+  class="waves-effect waves-light btn modal-trigger"><i class="material-icons left">add</i>Add New Trip</a>
 </div>
 <br>
 <table class="highlight">
-    <thead>
-      <tr>
-        <th>Trip Name</th>
-        <th>Start Date</th>
-        <th>End Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for trip in trips.all %}
-      <tr>
-        <td><a href="{% url 'trip_detail' trip.id %}">{{ trip.name }}</a></td>
-        <td>{{ trip.start_date }}</td>
-        <td>{{ trip.end_date }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  
+  <thead>
+    <tr>
+      <th>Trip Name</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for trip in trips.all %}
+    <tr>
+      <td><a href="{% url 'trip_detail' trip.id %}">{{ trip.name }}</a></td>
+      <td>{{ trip.start_date }}</td>
+      <td>{{ trip.end_date }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+  <div id="trip-modal" class="modal" style="max-height: 100%;">
+    <div class="modal-content">
+      {% include 'main_app/trip_form.html' %}
+    </div>
+  </div>
 {% endblock %}
