@@ -7,6 +7,7 @@
   class="waves-effect waves-light btn modal-trigger"><i class="material-icons left">add</i>Add New Trip</a>
 </div>
 <br>
+{% if trips %}
 <table class="highlight">
   <thead>
     <tr>
@@ -16,6 +17,7 @@
     </tr>
   </thead>
   <tbody>
+    
     {% for trip in trips.all %}
     <tr>
       <td><a href="{% url 'trip_detail' trip.id %}">{{ trip.name }}</a></td>
@@ -25,6 +27,7 @@
     {% endfor %}
   </tbody>
 </table>
+{% endif %}
   <div id="trip-modal" class="modal" style="max-height: 100%;">
     <div class="modal-content">
       {% include 'main_app/trip_form.html' %}

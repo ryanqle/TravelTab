@@ -22,7 +22,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     var elems = document.querySelectorAll('[id^="member-edit-modal-"]');
     var options = {
-      onOpenEnd: function (modal) {
+      onOpenStart: function (modal) {
         var modalContent = modal.querySelector('.modal-content');
         modalContent.innerHTML = '';
         var formUrl = modal.getAttribute('data-url');

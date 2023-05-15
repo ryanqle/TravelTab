@@ -11,7 +11,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     var elems = document.querySelectorAll('#login-modal');
     var options = {
-      onOpenEnd: function (modal) {
+      onOpenStart: function (modal) {
         var modalContent = modal.querySelector('.modal-content');
         modalContent.innerHTML = '';
         fetch("{% url 'login' %}")
