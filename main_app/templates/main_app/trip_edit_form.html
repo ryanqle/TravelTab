@@ -1,0 +1,52 @@
+<h1>Edit Trip</h1>
+
+<div class="row">
+  <form method="POST" action="{% url 'trip_update' pk=trip.id %}" class="col s12">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div class="row">
+      <div class="col s7">
+        <button type="submit" class="btn"><i class="material-icons right">send</i>Submit</button>
+        <a href="{{ view.get_success_url }}" class="btn grey lighten-1"><i class="material-icons right">cancel</i>Cancel</a>
+      </div>
+      <div class="col s5 right-align">
+        <a href="{% url 'trip_delete' pk=trip.id %}" class="btn red accent-4"><i class="material-icons right">delete</i>Delete</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelector("#trip-edit-modal");
+    var options = {
+      onOpenEnd: function (modal) {
+        var modalContent = modal.querySelector('.modal-content');
+        modalContent.innerHTML = '';
+        fetch("{% url 'trip_update' pk=trip.id %}")
+          .then(response => response.text())
+          .then(data => {
+            modalContent.innerHTML = data;
+            const startDateEl = document.getElementById('id_start_date');
+            M.Datepicker.init(startDateEl, {
+              format: 'mmmm d, yyyy',
+              defaultDate: new Date(),
+              setDefaultDate: true,
+              autoClose: true,
+              container: document.body,
+            });
+            const endDateEl = document.getElementById('id_end_date');
+            M.Datepicker.init(endDateEl, {
+              format: 'mmmm d, yyyy',
+              defaultDate: new Date(),
+              setDefaultDate: true,
+              autoClose: true,
+              container: document.body,
+            });
+          })
+          .catch(error => console.error(error));
+      }
+    };
+    var instances = M.Modal.init(elems, options);
+  });
+</script>
