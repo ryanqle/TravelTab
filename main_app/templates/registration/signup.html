@@ -1,64 +1,63 @@
-{% extends 'base.html' %}
+<h1>Sign Up</h1>
+<p class="red-text">{{ error_message }}</p>
 
-{% block content %}
-
-  <h1>Sign Up</h1>
-
-  <p class="red-text">{{ error_message }}</p>
-
-  <form method="POST" action="{% url 'signup' %}" class="col s12">
-    {% csrf_token %}
-
-    <div class="row">
-      <div class="input-field col s12">
-        {{ form.username }}
-        <label for="username">Username</label>
-      </div>
+<form method="POST" action="{% url 'signup' %}" class="col s12">
+  {% csrf_token %}
+  <div class="row">
+    <div class="input-field col s12">
+      {{ form.username }}
+      <label for="username">Username</label>
     </div>
-
-    <div class="row">
-      <div class="input-field col s6">
-        {{ form.first_name }}
-        <label for="first_name">First Name</label>
-      </div>
-      <div class="input-field col s6">
-        {{ form.last_name }}
-        <label for="last_name">Last Name</label>
-      </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s6">
+      {{ form.first_name }}
+      <label for="first_name">First Name</label>
     </div>
-
-    <div class="row">
-      <div class="input-field col s12">
-        {{ form.email }}
-        <label for="email">Email</label>
-      </div>
+    <div class="input-field col s6">
+      {{ form.last_name }}
+      <label for="last_name">Last Name</label>
     </div>
-
-    <div class="row">
-      <div class="input-field col s6">
-        {{ form.password1 }}
-        <label for="password1">Password</label>
-      </div>
-      <div class="input-field col s6">
-        {{ form.password2 }}
-        <label for="password2">Confirm Password</label>
-      </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      {{ form.email }}
+      <label for="email">Email</label>
     </div>
-
-    <div class="row">
-      <div class="input-field col s12">
-        <input type="submit" class="btn" value="Sign Up">
-        <a href="{% url 'home' %}" class="btn grey lighten-1"><i
-          class="material-icons right">cancel</i>Cancel</a>
-      </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s6">
+      {{ form.password1 }}
+      <label for="password1">Password</label>
     </div>
+    <div class="input-field col s6">
+      {{ form.password2 }}
+      <label for="password2">Confirm Password</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="input-field col s12">
+      <input type="submit" class="btn" value="Sign Up">
+      <a href="{% url 'home' %}" class="btn grey lighten-1"><i class="material-icons right">cancel</i>Cancel</a>
+    </div>
+  </div>
+</form>
 
-  </form>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var elems = document.querySelectorAll('.modal');
-      var instances = M.Modal.init(elems);
-    });
-  </script>
-  
-{% endblock %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelectorAll('#signup-modal');
+    var options = {
+      onOpenEnd: function (modal) {
+        var modalContent = modal.querySelector('.modal-content');
+        modalContent.innerHTML = '';
+        fetch("{% url 'signup' %}")
+          .then(response => response.text())
+          .then(data => {
+            modalContent.innerHTML = data;
+          })
+          .catch(error => console.error(error));
+      }
+    };
+    var instances = M.Modal.init(elems, options);
+  });
+</script>
