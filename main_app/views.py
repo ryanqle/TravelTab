@@ -7,6 +7,8 @@ from django import forms
 from .models import Trip, Member, Transaction
 from django.urls import reverse
 import locale
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -47,11 +49,12 @@ def signup(request):
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
 
+@login_required
 def user_trips(request):
     trips = Trip.objects.filter(user=request.user)
     return render(request, 'main_app/user_detail.html', {'trips' : trips})
 
-class TripCreate(CreateView):
+class TripCreate(LoginRequiredMixin, CreateView):
     model = Trip
     fields = ['name', 'start_date', 'end_date']
 
@@ -66,7 +69,7 @@ class TripCreate(CreateView):
     def get_success_url(self):
         return reverse('trip_detail', kwargs={'pk': self.object.pk})
     
-class TripDetail(DetailView):
+class TripDetail(LoginRequiredMixin, DetailView):
     model = Trip
 
     def get_context_data(self, **kwargs):
@@ -90,7 +93,7 @@ class TripDetail(DetailView):
         context['total_spent'] = formatted_total_spent
         return context
 
-class TripUpdate(UpdateView):
+class TripUpdate(LoginRequiredMixin, UpdateView):
     model = Trip
     fields = ['name', 'start_date', 'end_date']
     template_name = 'main_app/trip_edit_form.html'
@@ -98,12 +101,12 @@ class TripUpdate(UpdateView):
     def get_success_url(self):
         return reverse('trip_detail', kwargs={'pk': self.kwargs['pk']})
 
-class TripDelete(DeleteView):
+class TripDelete(LoginRequiredMixin, DeleteView):
     model = Trip
     fields = '__all__'
     success_url = '/trips'
 
-class MemberCreate(CreateView):
+class MemberCreate(LoginRequiredMixin, CreateView):
     model = Member
     fields = ['name']
     template_name = 'main_app/member_form.html'
@@ -118,7 +121,7 @@ class MemberCreate(CreateView):
         return reverse('trip_detail', kwargs={'pk': self.kwargs['pk']})
 
 
-class MemberUpdate(UpdateView):
+class MemberUpdate(LoginRequiredMixin, UpdateView):
     model = Member
     fields = ['name']
     template_name = 'main_app/member_edit_form.html'
@@ -128,7 +131,7 @@ class MemberUpdate(UpdateView):
         return reverse('trip_detail', kwargs={'pk': trip_id})
 
 
-class MemberDelete(DeleteView):
+class MemberDelete(LoginRequiredMixin, DeleteView):
     model = Member
     fields = '__all__'
 
@@ -136,7 +139,7 @@ class MemberDelete(DeleteView):
         trip_id = self.kwargs['trip_id']
         return reverse('trip_detail', kwargs={'pk': trip_id})
     
-class TransactionCreate(CreateView):
+class TransactionCreate(LoginRequiredMixin, CreateView):
     model = Transaction
     fields = ['name', 'description', 'amount', 'date', 'paid_by', 'paid_for']
     template_name = 'main_app/transaction_form.html'
@@ -174,7 +177,7 @@ class TransactionCreate(CreateView):
         trip_id = self.kwargs['pk']
         return reverse('trip_detail', kwargs={'pk': trip_id})
 
-class TransactionUpdate(UpdateView):
+class TransactionUpdate(LoginRequiredMixin, UpdateView):
     model = Transaction
     fields = ['name', 'description', 'amount', 'date', 'paid_by', 'paid_for']
     template_name = 'main_app/transaction_edit_form.html'
@@ -209,7 +212,7 @@ class TransactionUpdate(UpdateView):
         trip_id = self.kwargs['trip_id']
         return reverse('trip_detail', kwargs={'pk': trip_id})
 
-class TransactionDelete(DeleteView):
+class TransactionDelete(LoginRequiredMixin, DeleteView):
     model = Transaction
     fields = '__all__'
 
