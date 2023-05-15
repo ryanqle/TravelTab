@@ -1,40 +1,74 @@
-{% extends 'base.html' %}
-{% block content %}
-
-{% if object %}
-<h1>Edit Transaction</h1>
-{% else %}
-<h1>New Transaction</h1>
-{% endif %}
-
+<h3 class="center-align">New Transaction</h3>
 <div class="row">
-    <form method="POST" action="" class="col s12">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <div class="row">
-            <div class="col s6">
-                <button type="submit" class="btn"><i class="material-icons right">send</i>Submit</button>
-                <a href="{{ view.get_success_url }}" class="btn grey lighten-1"><i
-                        class="material-icons right">cancel</i>Cancel</a>
-            </div>
-        </div>
-    </form>
+  <form method="POST" action="" class="col s12">
+    {% csrf_token %}
+
+    {{ form.name.label_tag }}
+    {{ form.name }}
+    {{ form.description.label_tag }}
+    {{ form.description }}
+    <div class="row">
+      <div class="col s6">
+        {{ form.amount.label_tag }}
+        {{ form.amount}}
+      </div>
+      <div class="col s6">
+        {{ form.date.label_tag }}
+        {{ form.date }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s6">
+        {{ form.paid_by.label_tag }}
+        {{ form.paid_by}}
+      </div>
+      <div class="col s6">
+        {{ form.paid_for.label_tag }}
+        {{ form.paid_for}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col s12">
+        <button type="submit" class="btn"><i class="material-icons right">send</i>Submit</button>
+        <a href="{{ view.get_success_url }}" class="btn grey lighten-1"><i class="material-icons right">cancel</i>Cancel</a>
+      </div>
+    </div>
+  </form>
 </div>
 
-
 <script>
-    const startDateEl = document.getElementById('id_date');
-    M.Datepicker.init(startDateEl, {
-        format: 'mmmm d, yyyy',
-        defaultDate: new Date(),
-        setDefaultDate: true,
-        autoClose: true
-    });
-
-    document.addEventListener('DOMContentLoaded', function () {
-        var elems = document.querySelectorAll('select');
-        var instances = M.FormSelect.init(elems);
-    });
-
+  document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelector("#transaction-modal");
+    var options = {
+      onOpenEnd: function (modal) {
+        var modalContent = modal.querySelector('.modal-content');
+        modalContent.innerHTML = '';
+        var formUrl = modal.getAttribute('data-url');
+        fetch(formUrl)
+          .then(response => response.text())
+          .then(data => {
+            modalContent.innerHTML = data;
+            const dateEl = document.getElementById('id_date');
+            M.Datepicker.init(dateEl, {
+              format: 'mmmm d, yyyy',
+              defaultDate: new Date(),
+              setDefaultDate: true,
+              autoClose: true,
+              container: document.body,
+              onOpen: function () {
+                const datePickerEl = document.querySelector('.datepicker-container');
+                datePickerEl.style.padding = '10px';
+              }
+            });
+            var selectElems = document.querySelectorAll('select');
+            M.FormSelect.init(selectElems);
+            var form = modalContent.querySelector('form');
+            form.action = formUrl;
+          })
+          .catch(error => console.error(error));
+      }
+    };
+    var instances = M.Modal.init(elems, options);
+  });
 </script>
-{% endblock %}
