@@ -35,3 +35,9 @@ footer.page-footer {
 .tabs .indicator {
   background-color: #00897b;
 }
+
+label {
+  text-align: left;
+  display: block;
+  margin-bottom: 5px;
+}
